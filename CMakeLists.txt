@@ -5,13 +5,12 @@
 
 cmake_minimum_required(VERSION 3.12)
 
+# NOTE: We have to define this option BEFORE adding thirdparties
+# because it affects on the boost components list which should
+# be defined once for Conan package manager
 option(BUILD_TESTS "Whether to include the test suite in build" OFF)
-set(PACKAGE_MANAGER "Hunter" CACHE STRING "Package manager for 3rdparties")
-set(SUPPORTED_PACKAGE_MANAGERS "Hunter" "Conan")
-if (NOT ${PACKAGE_MANAGER} IN_LIST SUPPORTED_PACKAGE_MANAGERS)
-    message(FATAL_ERROR "Uknown package manager specified: \"${PACKAGE_MANAGER}\". Valie options: ${SUPPORTED_PACKAGE_MANAGERS}")
-endif()
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/${PACKAGE_MANAGER}/Init.cmake")
+
+include("${CMAKE_SOURCE_DIR}/cmake/3rdpartyUtils.cmake")
 
 project(Scale LANGUAGES CXX VERSION 1.0.0)
 
@@ -21,8 +20,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/${PACKAGE_MANAGER}/Boost.cmake")
-include("${CMAKE_CURRENT_LIST_DIR}/cmake/${PACKAGE_MANAGER}/Microsoft.GSL.cmake")
+add_3rdparty("Boost")
+add_3rdparty("Microsoft.GSL")
 
 add_subdirectory(src)
 

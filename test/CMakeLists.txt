@@ -8,7 +8,7 @@ if (POLICY CMP0076)
     cmake_policy(SET CMP0076 NEW)
 endif ()
 
-include("${CMAKE_SOURCE_DIR}/cmake/${PACKAGE_MANAGER}/GTest.cmake")
+add_3rdparty("GTest")
 
 function(disable_clang_tidy target)
     set_target_properties(${target} PROPERTIES

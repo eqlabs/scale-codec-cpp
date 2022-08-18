@@ -16,6 +16,12 @@ include(${CMAKE_BINARY_DIR}/conan.cmake)
 function(add_conan_package PACKAGE_NAME PACKAGE_VERSION)
     set(PACKAGE_DIR "${CMAKE_BINARY_DIR}/${PACKAGE_NAME}")
     file(MAKE_DIRECTORY "${PACKAGE_DIR}")
+    # We have to use a hack to change CMAKE_CURRENT_BINARY_DIR because
+    # inside `conan_cmake_install` conanfile.txt directory is hardcoded to
+    # CMAKE_CURRENT_BINARY_DIR. We use a separate conan run for each 3rdparty
+    # because we want to make configuring different 3rdparties independently.
+    # That's why we need to change directory here.
+    # TODO: make a pull request to conan-cmake to make conanfile.txt path configurable.
     set(PREV_CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
     set(CMAKE_CURRENT_BINARY_DIR "${PACKAGE_DIR}")
     cmake_parse_arguments(ADD_CONAN_PACKAGE "" "" "CONFIG_OPTIONS" ${ARGN})
