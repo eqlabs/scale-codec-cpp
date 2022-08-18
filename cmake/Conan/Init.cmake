@@ -12,16 +12,24 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
-list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
 
 function(add_conan_package PACKAGE_NAME PACKAGE_VERSION)
+    set(PACKAGE_DIR "${CMAKE_BINARY_DIR}/${PACKAGE_NAME}")
+    file(MAKE_DIRECTORY "${PACKAGE_DIR}")
+    set(PREV_CMAKE_CURRENT_BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
+    set(CMAKE_CURRENT_BINARY_DIR "${PACKAGE_DIR}")
+    cmake_parse_arguments(ADD_CONAN_PACKAGE "" "" "CONFIG_OPTIONS" ${ARGN})
+
     conan_cmake_configure(REQUIRES ${PACKAGE_NAME}/${PACKAGE_VERSION}
-        GENERATORS cmake_find_package)
+        GENERATORS cmake_find_package
+        OPTIONS ${MY_INSTALL_CONFIG_OPTIONS})
 
     conan_cmake_autodetect(CONAN_SETTINGS)
-
     conan_cmake_install(PATH_OR_REFERENCE .
         BUILD missing
         REMOTE conancenter
         SETTINGS ${CONAN_SETTINGS})
+    set(CMAKE_CURRENT_BINARY_DIR "${PREV_CMAKE_CURRENT_BINARY_DIR}")
+    list(APPEND CMAKE_MODULE_PATH "${PACKAGE_DIR}")
+    set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH}" PARENT_SCOPE)
 endfunction()

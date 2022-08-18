@@ -14,9 +14,7 @@ set(CMAKE_CXX_STANDARD 20)
 list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/scale-install/")
 find_package(scale REQUIRED)
 
-hunter_add_package(Boost COMPONENTS random)
-find_package(Boost CONFIG REQUIRED random)
-
+include("${CMAKE_SOURCE_DIR}/cmake/${PACKAGE_MANAGER}/Boost.random.cmake")
 add_executable(scale_test scale_test.cpp)
 target_link_libraries(scale_test
     scale::scale
