@@ -5,7 +5,7 @@ if (BUILD_TESTS)
 else()
     set(BOOST_WITHOUT_RANDOM "True")
 endif()
-add_conan_package(boost 1.72.0
+add_conan_package(boost 1.80.0
     CONFIG_OPTIONS
     boost:without_atomic=True
     boost:without_chrono=True
