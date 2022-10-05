@@ -7,6 +7,8 @@
 #define SCALE_CORE_SCALE_SCALE_DECODER_STREAM_HPP
 
 #include <array>
+#include <deque>
+#include <list>
 #include <iterator>
 #include <optional>
 
